@@ -7,40 +7,20 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Tugas Jurnal'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -48,68 +28,162 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  var anggota = [
+    'Akmal Muhamad Faza',
+    'Bagja 9102 Kurniawan',
+    'Daffa Barin Tizad Riyadi',
+    'Vincentius Arnold Fridolin',
+    'Dimas Bayu Nugraha',
+    'Wahyu Hauzan Rafi'
+  ];
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  Widget _loopingAnggota(anggota, int index) {
+    return Container(
+      height: 75.0,
+      color: index % 2 == 0 ? Colors.blueGrey[100] : Colors.blueGrey[200],
+      child: Row(
+        children: <Widget>[
+          Container(
+            height: 55.0,
+            width: 55.0,
+            margin: const EdgeInsets.all(10.0),
+            color: index % 2 == 0 ? Colors.blueGrey[300] : Colors.blueGrey[100],
+            child: index % 3 == 0
+                ? Stack(
+                    children: <Widget>[
+                      const Center(
+                        child: Icon(Icons.account_circle, size: 50.0),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Icon(
+                          Icons.thumb_up,
+                          color: Colors.blue[800],
+                        ),
+                      ),
+                    ],
+                  )
+                : index == 4
+                    ? Stack(
+                        children: <Widget>[
+                          const Center(
+                            child:
+                                Icon(Icons.account_circle_outlined, size: 50.0),
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Icon(
+                              Icons.block_rounded,
+                              color: Colors.red[700],
+                            ),
+                          ),
+                        ],
+                      )
+                    : const Center(
+                        child: Icon(Icons.account_circle_outlined, size: 50.0),
+                      ),
+          ),
+          Expanded(
+            child: Text(
+              '$anggota',
+              style: TextStyle(
+                  color: Colors.blueGrey[800], fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+              margin: const EdgeInsets.only(right: 10.0),
+              child: const Icon(
+                Icons.group,
+                size: 25.0,
+              ))
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    int index = 0;
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Center(
+          child: Text(widget.title),
+        ),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: Container(
+        margin: const EdgeInsets.all(10.0),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Container(
+              margin: const EdgeInsets.only(bottom: 10.0),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.only(right: 10.0),
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey,
+                      shape: BoxShape.circle,
+                      border: Border.all(width: 3.0, color: Colors.black),
+                    ),
+                    height: 50,
+                    width: 50,
+                  ),
+                  Flexible(
+                    flex: 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const <Widget>[
+                        Text(
+                          'Wahyu Hauzan Rafi',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '1301191313',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Container(
+              margin: const EdgeInsets.only(top: 10.0),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 10.0),
+                    child: const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Anggota Tim',
+                        style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 350.0,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blueGrey),
+                    ),
+                    child: ListView(
+                      children: <Widget>[
+                        for (var item in anggota) _loopingAnggota(item, index++)
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
