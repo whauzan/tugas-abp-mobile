@@ -6,8 +6,10 @@ void main() {
     initialRoute: '/',
     routes: {
       '/': (context) => const MyHomePage(),
-      '/first': (context) => const FirstRoute(judul: 'Tubes 1', desc: 'Website with Laravel'),
-      '/second': (context) => const SecondRoute(judul: 'Tubes 2', desc: 'Mobile App with Flutter'),
+      '/first': (context) =>
+          const FirstRoute(judul: 'Tubes 1', desc: 'Website with Laravel'),
+      '/second': (context) =>
+          const SecondRoute(judul: 'Tubes 2', desc: 'Mobile App with Flutter'),
     },
   ));
 }
@@ -54,7 +56,8 @@ class MyHomePage extends StatelessWidget {
 }
 
 class FirstRoute extends StatelessWidget {
-  const FirstRoute({Key? key, required this.judul, required this.desc}) : super(key: key);
+  const FirstRoute({Key? key, required this.judul, required this.desc})
+      : super(key: key);
   final String judul, desc;
   @override
   Widget build(BuildContext context) {
@@ -71,7 +74,8 @@ class FirstRoute extends StatelessWidget {
                 )),
             TextSpan(
                 text: desc,
-                style: const TextStyle(height: 0, fontSize: 15, color: Colors.black)),
+                style: const TextStyle(
+                    height: 0, fontSize: 15, color: Colors.black)),
           ]),
         ),
       ),
@@ -80,7 +84,8 @@ class FirstRoute extends StatelessWidget {
 }
 
 class SecondRoute extends StatelessWidget {
-  const SecondRoute({Key? key, required this.judul, required this.desc}) : super(key: key);
+  const SecondRoute({Key? key, required this.judul, required this.desc})
+      : super(key: key);
   final String judul, desc;
   @override
   Widget build(BuildContext context) {
@@ -88,7 +93,7 @@ class SecondRoute extends StatelessWidget {
       body: Center(
         child: RichText(
           textAlign: TextAlign.center,
-          text:  TextSpan(children: [
+          text: TextSpan(children: [
             TextSpan(
                 text: "$judul \n\n",
                 style: const TextStyle(
@@ -97,7 +102,8 @@ class SecondRoute extends StatelessWidget {
                 )),
             TextSpan(
                 text: desc,
-                style: const TextStyle(height: 0, fontSize: 15, color: Colors.black)),
+                style: const TextStyle(
+                    height: 0, fontSize: 15, color: Colors.black)),
           ]),
         ),
       ),
