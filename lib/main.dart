@@ -1,115 +1,149 @@
+import 'dart:convert';
+  
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
+import 'package:http/http.dart' as http;
+  
+void main() => runApp(const MyApp());
+  
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+    return const MaterialApp(
+      home: Todo(),
+    );
+  }
+}
+  
+//Creating a class user to store the data;
+class User {
+  final int id;
+  final int userId;
+  final String title;
+  final bool completed;
+  
+  User({
+    required this.id,
+    required this.userId,
+    required this.title,
+    required this.completed,
+  });
+}
+  
+class Todo extends StatefulWidget {
+  const Todo({Key? key}) : super(key: key);
+
+  @override
+  _TodoState createState() => _TodoState();
+}
+  
+class _TodoState extends State<Todo> {
+//Applying get request.
+  
+  Future<List<User>> getRequest() async {
+    //replace your restFull API here.
+    String url = "https://jsonplaceholder.typicode.com/todos";
+    final response = await http.get(Uri.parse(url));
+  
+    var responseData = json.decode(response.body);
+  
+    //Creating a list to store input data;
+    List<User> users = [];
+    for (var singleUser in responseData) {
+      User user = User(
+          id: singleUser["id"],
+          userId: singleUser["userId"],
+          title: singleUser["title"],
+          completed: singleUser["completed"]);
+  
+      //Adding user to the list.
+      users.add(user);
+    }
+    return users;
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("To Do List"),
+        ),
+        body: Container(
+          decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+          // padding: const EdgeInsets.all(16.0),
+          child: FutureBuilder(
+            future: getRequest(),
+            builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+              if (snapshot.data == null) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (ctx, index) => Card(
+                    shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Colors.blue.shade700,
+                    ),
+                  ),
+                    child: ListTile(
+                      title: Column (children: [
+                        Text(snapshot.data[index].title),
+                        Text(snapshot.data[index].completed ? "Completed": "Not Completed"),]),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => DataDetail(
+                              dataModel: snapshot.data[index],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
+class DataDetail extends StatelessWidget {
+  final User dataModel;
+  const DataDetail({Key? key, required this.dataModel}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text("To Do List Detail"),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "User Id : " + dataModel.userId.toString(),
+            style: const TextStyle(fontSize: 13),
+          ),
+          Text(
+            "Id : " + dataModel.id.toString(),
+            style: const TextStyle(fontSize: 13),
+          ),
+          Text(
+            dataModel.title,
+            style: const TextStyle(fontSize: 13),
+          ),
+          Text(
+            dataModel.completed ? "Completed": "Not Completed",
+            style: const TextStyle(fontSize: 13),
+          )
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
